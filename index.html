@@ -3,19 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <title>KMEDrive</title>
+    <link href="https://cdn.jsdelivr.net/npm/cesium@1.113/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
     <style>
-        body, html { margin: 0; height: 100%; overflow: hidden; }
-        #map { width: 100%; height: 100%; }
+        html, body, #cesiumContainer {
+            width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
+        }
     </style>
 </head>
 <body>
-    <div id="map"></div>
-    <script src="https://cesium.com/downloads/cesiumjs/releases/1.113/Build/Cesium/Cesium.js"></script>
-    <link href="https://cesium.com/downloads/cesiumjs/releases/1.113/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+    <div id="cesiumContainer"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/cesium@1.113/Build/Cesium/Cesium.js"></script>
     <script>
-        // Initialize Cesium viewer
-        const viewer = new Cesium.Viewer('map', {
-            terrainProvider: Cesium.createWorldTerrain()
+        // Initialize the Cesium Viewer
+        const viewer = new Cesium.Viewer('cesiumContainer', {
+            terrainProvider: Cesium.createWorldTerrain(),
+            timeline: false,
+            animation: false
         });
     </script>
 </body>
