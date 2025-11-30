@@ -15,12 +15,14 @@
 
     <script src="https://cdn.jsdelivr.net/npm/cesium@1.113/Build/Cesium/Cesium.js"></script>
     <script>
-        // Initialize the Cesium Viewer
-        const viewer = new Cesium.Viewer('cesiumContainer', {
-            terrainProvider: Cesium.createWorldTerrain(),
-            timeline: false,
-            animation: false
-        });
-    </script>
+    // Replace 'YOUR_TOKEN_HERE' with your Cesium ion token
+    Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2YzI2M2ZiZC02ODQ3LTQzMWYtYTgyNS0zYTY4YzA2ZjYzMjIiLCJpZCI6MzY1MzAwLCJpYXQiOjE3NjQ1Mzc2MjZ9.Fh8NohGnIuUmHU6b76s6eX0CmLJ1hwyNkTlr5HPdz6k';
+
+    const viewer = new Cesium.Viewer('cesiumContainer', {
+        terrainProvider: Cesium.createWorldTerrain(),
+        timeline: false,
+        animation: false
+    });
+</script>
 </body>
 </html>
