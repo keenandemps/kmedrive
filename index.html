@@ -2,29 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>KMEDrive</title>
-    <link rel="stylesheet" href="https://cesium.com/downloads/cesiumjs/releases/1.113/Build/Cesium/Widgets/widgets.css">
-    <style>
-        html, body, #cesiumContainer {
-            width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
-        }
-    </style>
+    <title>KMEDrive Test</title>
 </head>
 <body>
-    <div id="cesiumContainer"></div>
+    <h1>Hello World!</h1>
+    <p>If you see this, your HTML is loading correctly.</p>
 
-    <script src="https://cesium.com/downloads/cesiumjs/releases/1.113/Build/Cesium/Cesium.js"></script>
     <script>
-        // Your Cesium ion token
-        Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2YzI2M2ZiZC02ODQ3LTQzMWYtYTgyNS0zYTY4YzA2ZjYzMjIiLCJpZCI6MzY1MzAwLCJpYXQiOjE3NjQ1Mzc2MjZ9.Fh8NohGnIuUmHU6b76s6eX0CmLJ1hwyNkTlr5HPdz6k';
-
-        // Initialize Cesium viewer
-        const viewer = new Cesium.Viewer('cesiumContainer', {
-            terrainProvider: Cesium.createWorldTerrain(),
-            timeline: false,
-            animation: false,
-            shouldAnimate: true
-        });
+        console.log("Hello World from JavaScript!");
+        alert("Hello World from JS!");
     </script>
 </body>
 </html>
