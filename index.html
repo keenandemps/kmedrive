@@ -2,15 +2,66 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>KMEDrive Test</title>
+    <title>KMEDrive Globe Test</title>
+    <style>
+        body { margin: 0; overflow: hidden; }
+        #globeViz { width: 100vw; height: 100vh; display: block; }
+    </style>
 </head>
 <body>
-    <h1>Hello World!</h1>
-    <p>If you see this, your HTML is loading correctly.</p>
+    <div id="globeViz"></div>
+
+    <!-- Globe.gl library -->
+    <script src="https://unpkg.com/three@0.152.2/build/three.min.js"></script>
+    <script src="https://unpkg.com/globe.gl"></script>
 
     <script>
-        console.log("Hello World from JavaScript!");
-        alert("Hello World from JS!");
+        // Create the globe
+        const Globe = GlobeGL()
+            .globeImageUrl('//unpkg.com/three-globe/example/img/earth-dark.jpg')
+            .showAtmosphere(true)
+            .pointOfView({ lat: 0, lng: 0, altitude: 2 });
+
+        document.getElementById('globeViz').appendChild(Globe.renderer().domElement);
+
+        // Create a "car" cube
+        const carGeometry = new THREE.BoxGeometry(0.02, 0.02, 0.02);
+        const carMaterial = new THREE.MeshStandardMaterial({ color: 'red' });
+        const car = new THREE.Mesh(carGeometry, carMaterial);
+
+        Globe.scene().add(car);
+
+        // Set initial position
+        let carLat = 0;
+        let carLng = 0;
+
+        // Move car with arrow keys
+        document.addEventListener('keydown', (e) => {
+            const step = 0.5; // degrees
+            if(e.key === 'ArrowUp') carLat += step;
+            if(e.key === 'ArrowDown') carLat -= step;
+            if(e.key === 'ArrowLeft') carLng -= step;
+            if(e.key === 'ArrowRight') carLng += step;
+
+            // Convert lat/lng to 3D coords on globe
+            const phi = (90 - carLat) * (Math.PI/180);
+            const theta = (carLng + 180) * (Math.PI/180);
+            const radius = 1; // Globe radius
+            car.position.x = -radius * Math.sin(phi) * Math.cos(theta);
+            car.position.y = radius * Math.cos(phi);
+            car.position.z = radius * Math.sin(phi) * Math.sin(theta);
+        });
+
+        // Add a light so cube is visible
+        const light = new THREE.DirectionalLight(0xffffff, 1);
+        light.position.set(5,5,5);
+        Globe.scene().add(light);
+
+        // Animation loop
+        (function animate(){
+            requestAnimationFrame(animate);
+            Globe.renderer().render(Globe.scene(), Globe.camera());
+        })();
     </script>
 </body>
 </html>
