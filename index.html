@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>KMEDrive Cesium Globe</title>
-  <link href="https://cesium.com/downloads/cesiumjs/releases/1.113/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+  <link href="https://cesium.com/downloads/cesiumjs/releases/1.108/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
   <style>
     html, body, #cesiumContainer {
       width: 100%; height: 100%; margin: 0; padding: 0; overflow: hidden;
@@ -13,30 +13,30 @@
 <body>
   <div id="cesiumContainer"></div>
 
-  <script src="https://cesium.com/downloads/cesiumjs/releases/1.113/Build/Cesium/Cesium.js"></script>
+  <script src="https://cesium.com/downloads/cesiumjs/releases/1.108/Build/Cesium/Cesium.js"></script>
   <script>
     // Replace with your Cesium Ion token
     Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2YzI2M2ZiZC02ODQ3LTQzMWYtYTgyNS0zYTY4YzA2ZjYzMjIiLCJpZCI6MzY1MzAwLCJpYXQiOjE3NjQ1Mzc2MjZ9.Fh8NohGnIuUmHU6b76s6eX0CmLJ1hwyNkTlr5HPdz6k';
 
-    // Create the Cesium Viewer
+    // Minimal Viewer
     const viewer = new Cesium.Viewer('cesiumContainer', {
-      terrainProvider: Cesium.createWorldTerrain(),
+      imageryProvider: new Cesium.IonImageryProvider({ assetId: 2 }), // global satellite imagery
+      baseLayerPicker: false,
       timeline: false,
-      animation: false,
-      shouldAnimate: true
+      animation: false
     });
 
-    // Optional: fly to initial location
+    // Fly to initial location
     viewer.camera.flyTo({
-      destination : Cesium.Cartesian3.fromDegrees(0, 0, 10000000) // over equator
+      destination : Cesium.Cartesian3.fromDegrees(0, 0, 20000000)
     });
 
-    // Example: add a simple red box (like a car) at lat/lng
+    // Add a simple red box (like a car)
     const redBox = viewer.entities.add({
       name : 'Car',
       position: Cesium.Cartesian3.fromDegrees(0, 0, 0),
       box : {
-        dimensions : new Cesium.Cartesian3(500000.0, 500000.0, 500000.0),
+        dimensions : new Cesium.Cartesian3(1000000.0, 1000000.0, 1000000.0),
         material : Cesium.Color.RED
       }
     });
