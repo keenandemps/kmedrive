@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Cesium OSM Globe</title>
+    <title>KMEDrive Globe</title>
     <script src="https://cesium.com/downloads/cesiumjs/releases/1.108/Build/Cesium/Cesium.js"></script>
     <link href="https://cesium.com/downloads/cesiumjs/releases/1.108/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
 
@@ -20,22 +20,20 @@
     <div id="cesiumContainer"></div>
 
     <script>
-        // REQUIRED for CesiumJS
         Cesium.Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2YzI2M2ZiZC02ODQ3LTQzMWYtYTgyNS0zYTY4YzA2ZjYzMjIiLCJpZCI6MzY1MzAwLCJpYXQiOjE3NjQ1Mzc2MjZ9.Fh8NohGnIuUmHU6b76s6eX0CmLJ1hwyNkTlr5HPdz6k";
 
-        // Standard Cesium viewer
         const viewer = new Cesium.Viewer("cesiumContainer", {
-            imageryProvider: new Cesium.UrlTemplateImageryProvider({
-                url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
-            }),
-            terrainProvider: new Cesium.EllipsoidTerrainProvider(),
+            baseLayerPicker: false,
             animation: false,
             timeline: false,
-            geocoder: false,
-            baseLayerPicker: false
         });
 
-        viewer.scene.globe.enableLighting = false;
+        // Load Cesium's built-in OpenStreetMap layer
+        viewer.imageryLayers.addImageryProvider(
+            new Cesium.OpenStreetMapImageryProvider({
+                url: "https://tile.openstreetmap.org/"
+            })
+        );
     </script>
 </body>
 </html>
