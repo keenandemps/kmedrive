@@ -1,7 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>KMEDrive Globe</title>
+    <meta charset="UTF-8">
+    <title>KMEDrive</title>
+
+    <!-- CesiumJS -->
     <script src="https://cesium.com/downloads/cesiumjs/releases/1.108/Build/Cesium/Cesium.js"></script>
     <link href="https://cesium.com/downloads/cesiumjs/releases/1.108/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
 
@@ -20,74 +23,38 @@
     <div id="cesiumContainer"></div>
 
     <script>
-        Cesium.Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2YzI2M2ZiZC02ODQ3LTQzMWYtYTgyNS0zYTY4YzA2ZjYzMjIiLCJpZCI6MzY1MzAwLCJpYXQiOjE3NjQ1Mzc2MjZ9.Fh8NohGnIuUmHU6b76s6eX0CmLJ1hwyNkTlr5HPdz6k";
+        // Your Cesium ion token
+        Cesium.Ion.defaultAccessToken = "YOUR_TOKEN_HERE";
 
+        // Create viewer
         const viewer = new Cesium.Viewer("cesiumContainer", {
             baseLayerPicker: false,
             animation: false,
             timeline: false,
         });
 
-// CAR ENTITY — Whitehorse, New Jersey
-const car = viewer.entities.add({
-    name: "Car",
-    position: Cesium.Cartesian3.fromDegrees(-74.7124, 40.1957, 10), // Whitehorse NJ
-    box: {
-        dimensions: new Cesium.Cartesian3(4, 2, 1.5), // Car size (meters)
-        material: Cesium.Color.RED, // Temporary visual car
-    }
-});
-
-// Keep camera locked on the car
-viewer.trackedEntity = car;
-
-let speed = 0;
-let maxSpeed = 30; // meters per second (~67 mph)
-let turnRate = Cesium.Math.toRadians(45); // degrees per second
-let heading = 0;
-
-const keys = {};
-
-// Track key presses
-document.addEventListener("keydown", e => keys[e.key.toLowerCase()] = true);
-document.addEventListener("keyup", e => keys[e.key.toLowerCase()] = false);
-
-// Update loop
-viewer.clock.onTick.addEventListener(() => {
-    if (!car.position.getValue) return;
-
-    // Turning
-    if (keys["a"]) heading += turnRate * viewer.clock.deltaTime;
-    if (keys["d"]) heading -= turnRate * viewer.clock.deltaTime;
-
-    // Speed control
-    if (keys["w"]) speed = Math.min(speed + 1, maxSpeed);
-    else if (keys["s"]) speed = Math.max(speed - 1, -maxSpeed / 2);
-    else speed *= 0.98; // natural slow-down
-
-    // Compute forward movement
-    const currentPos = car.position.getValue(viewer.clock.currentTime);
-    const cartographic = Cesium.Cartographic.fromCartesian(currentPos);
-
-    const distance = speed * viewer.clock.deltaTime;
-    const newLon = cartographic.longitude + distance * Math.sin(heading) / 6378137;
-    const newLat = cartographic.latitude + distance * Math.cos(heading) / 6378137;
-
-    car.position = Cesium.Cartesian3.fromRadians(newLon, newLat, 10);
-
-    // Update car orientation
-    car.orientation = Cesium.Transforms.headingPitchRollQuaternion(
-        car.position.getValue(viewer.clock.currentTime),
-        new Cesium.HeadingPitchRoll(heading, 0, 0)
-    );
-});
-
-        // Load Cesium's built-in OpenStreetMap layer
+        // Add OpenStreetMap Imagery
         viewer.imageryLayers.addImageryProvider(
             new Cesium.OpenStreetMapImageryProvider({
                 url: "https://tile.openstreetmap.org/"
             })
         );
+
+        // ------------------------------
+        //        CAR ENTITY
+        // ------------------------------
+        const car = viewer.entities.add({
+            name: "Car",
+            position: Cesium.Cartesian3.fromDegrees(-74.7124, 40.1957, 10), // Whitehorse, NJ
+            box: {
+                dimensions: new Cesium.Cartesian3(4, 2, 1.5), // (meters) size of car
+                material: Cesium.Color.RED, // visible placeholder car
+            }
+        });
+
+        // Make the camera follow the car
+        viewer.trackedEntity = car;
+
     </script>
 </body>
 </html>
