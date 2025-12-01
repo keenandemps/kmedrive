@@ -33,7 +33,7 @@
             timeline: false,
         });
 
-        // Add OpenStreetMap Imagery
+        // Add OpenStreetMap imagery
         viewer.imageryLayers.addImageryProvider(
             new Cesium.OpenStreetMapImageryProvider({
                 url: "https://tile.openstreetmap.org/"
@@ -47,14 +47,58 @@
             name: "Car",
             position: Cesium.Cartesian3.fromDegrees(-74.7124, 40.1957, 10), // Whitehorse, NJ
             box: {
-                dimensions: new Cesium.Cartesian3(4, 2, 1.5), // (meters) size of car
-                material: Cesium.Color.RED, // visible placeholder car
+                dimensions: new Cesium.Cartesian3(6, 3, 2), // BIGGER CAR: 6m long, 3m wide, 2m tall
+                material: Cesium.Color.RED,
             }
         });
 
-        // Make the camera follow the car
+        // Camera follows the car
         viewer.trackedEntity = car;
 
+        // ------------------------------
+        //       MOVEMENT VARIABLES
+        // ------------------------------
+        let speed = 0;
+        const maxSpeed = 40; // meters per second (~90 mph)
+        const turnRate = Cesium.Math.toRadians(60); // turning speed (radians/sec)
+        let heading = 0;
+
+        const keys = {};
+
+        // Track key presses
+        document.addEventListener("keydown", e => keys[e.key.toLowerCase()] = true);
+        document.addEventListener("keyup", e => keys[e.key.toLowerCase()] = false);
+
+        // Update loop on every frame
+        viewer.clock.onTick.addEventListener(() => {
+            if (!car.position.getValue) return;
+
+            // Turning
+            if (keys["a"]) heading += turnRate * viewer.clock.deltaTime;
+            if (keys["d"]) heading -= turnRate * viewer.clock.deltaTime;
+
+            // Speed control
+            if (keys["w"]) speed = Math.min(speed + 1, maxSpeed);
+            else if (keys["s"]) speed = Math.max(speed - 1, -maxSpeed/2);
+            else speed *= 0.95; // natural slow down
+
+            // Move the car
+            const currentPos = car.position.getValue(viewer.clock.currentTime);
+            const cartographic = Cesium.Cartographic.fromCartesian(currentPos);
+
+            // Approximate movement over Earth's surface
+            const distance = speed * viewer.clock.deltaTime;
+            const newLon = cartographic.longitude + distance * Math.sin(heading) / 6378137;
+            const newLat = cartographic.latitude + distance * Math.cos(heading) / 6378137;
+
+            car.position = Cesium.Cartesian3.fromRadians(newLon, newLat, 10);
+
+            // Update orientation
+            car.orientation = Cesium.Transforms.headingPitchRollQuaternion(
+                car.position.getValue(viewer.clock.currentTime),
+                new Cesium.HeadingPitchRoll(heading, 0, 0)
+            );
+        });
     </script>
 </body>
 </html>
