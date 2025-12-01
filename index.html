@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>KMEDrive Cesium Globe</title>
+  <title>KMEDrive Cesium Globe Test</title>
   <link href="https://cesium.com/downloads/cesiumjs/releases/1.108/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
   <style>
     html, body, #cesiumContainer {
@@ -15,36 +15,29 @@
 
   <script src="https://cesium.com/downloads/cesiumjs/releases/1.108/Build/Cesium/Cesium.js"></script>
   <script>
-    // your ion token
-    Cesium.Ion.defaultAccessToken = 
-    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2YzI2M2ZiZC02ODQ3LTQzMWYtYTgyNS0zYTY4YzA2ZjYzMjIiLCJpZCI6MzY1MzAwLCJpYXQiOjE3NjQ1Mzc2MjZ9.Fh8NohGnIuUmHU6b76s6eX0CmLJ1hwyNkTlr5HPdz6k';
-
-    // Earth imagery (WORKING)
-    const imageryProvider = new Cesium.IonImageryProvider({
-        assetId: 3   // <-- this is Cesium World Imagery (solid, reliable)
-    });
+    // NO ION TOKEN NEEDED FOR THIS TEST
 
     const viewer = new Cesium.Viewer('cesiumContainer', {
-      imageryProvider,
       baseLayerPicker: false,
       timeline: false,
       animation: false
     });
 
-    // Fly to start
+    // Force Bing Maps satellite layer
+    viewer.imageryLayers.addImageryProvider(
+      new Cesium.BingMapsImageryProvider({
+        url: 'https://dev.virtualearth.net',
+        key: '' // Bing allows some default tile access without a key
+      })
+    );
+
+    viewer.imageryLayers.remove(viewer.imageryLayers.get(0)); // remove default black layer
+
+    // Fly to Earth
     viewer.camera.flyTo({
-      destination: Cesium.Cartesian3.fromDegrees(0, 0, 20000000)
+      destination: Cesium.Cartesian3.fromDegrees(0, 0, 25000000)
     });
 
-    // Add red box for testing
-    viewer.entities.add({
-      name: 'Car',
-      position: Cesium.Cartesian3.fromDegrees(0, 0, 0),
-      box: {
-        dimensions: new Cesium.Cartesian3(1000000.0, 1000000.0, 1000000.0),
-        material: Cesium.Color.RED
-      }
-    });
   </script>
 </body>
 </html>
