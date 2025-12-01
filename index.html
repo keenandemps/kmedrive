@@ -15,29 +15,34 @@
 
   <script src="https://cesium.com/downloads/cesiumjs/releases/1.108/Build/Cesium/Cesium.js"></script>
   <script>
-    // Replace with your Cesium Ion token
-    Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2YzI2M2ZiZC02ODQ3LTQzMWYtYTgyNS0zYTY4YzA2ZjYzMjIiLCJpZCI6MzY1MzAwLCJpYXQiOjE3NjQ1Mzc2MjZ9.Fh8NohGnIuUmHU6b76s6eX0CmLJ1hwyNkTlr5HPdz6k';
+    // your ion token
+    Cesium.Ion.defaultAccessToken = 
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2YzI2M2ZiZC02ODQ3LTQzMWYtYTgyNS0zYTY4YzA2ZjYzMjIiLCJpZCI6MzY1MzAwLCJpYXQiOjE3NjQ1Mzc2MjZ9.Fh8NohGnIuUmHU6b76s6eX0CmLJ1hwyNkTlr5HPdz6k';
 
-    // Minimal Viewer
+    // Earth imagery (WORKING)
+    const imageryProvider = new Cesium.IonImageryProvider({
+        assetId: 3   // <-- this is Cesium World Imagery (solid, reliable)
+    });
+
     const viewer = new Cesium.Viewer('cesiumContainer', {
-      imageryProvider: new Cesium.IonImageryProvider({ assetId: 2 }), // global satellite imagery
+      imageryProvider,
       baseLayerPicker: false,
       timeline: false,
       animation: false
     });
 
-    // Fly to initial location
+    // Fly to start
     viewer.camera.flyTo({
-      destination : Cesium.Cartesian3.fromDegrees(0, 0, 20000000)
+      destination: Cesium.Cartesian3.fromDegrees(0, 0, 20000000)
     });
 
-    // Add a simple red box (like a car)
-    const redBox = viewer.entities.add({
-      name : 'Car',
+    // Add red box for testing
+    viewer.entities.add({
+      name: 'Car',
       position: Cesium.Cartesian3.fromDegrees(0, 0, 0),
-      box : {
-        dimensions : new Cesium.Cartesian3(1000000.0, 1000000.0, 1000000.0),
-        material : Cesium.Color.RED
+      box: {
+        dimensions: new Cesium.Cartesian3(1000000.0, 1000000.0, 1000000.0),
+        material: Cesium.Color.RED
       }
     });
   </script>
